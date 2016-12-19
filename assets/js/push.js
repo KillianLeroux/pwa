@@ -121,6 +121,8 @@ function updateSubscriptionOnServer(subscription) {
   } else {
     subscriptionDetails.classList.add('is-invisible');
   }
+  subscriptionJson.select();
+  document.execCommand('copy');
 }
 
 function updateBtn() {
