@@ -1,8 +1,34 @@
+'use strict';
+
 // tick this to make the cache invalidate and update
 const CACHE_VERSION = 1;
 const CURRENT_CACHES = {
   'read-through': 'read-through-cache-v' + CACHE_VERSION
 };
+
+self.addEventListener('push', function(event) {
+  console.log('[Service Worker] Push Received.');
+  console.log(`[Service Worker] Push had this data: "${event.data.text()}"`);
+
+  const title = 'Push Forum Mobile';
+  const options = {
+    body: 'Yay it works!',
+    icon: 'images/icon.png',
+    badge: 'images/badge.png'
+  };
+
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+self.addEventListener('notificationclick', function(event) {
+  console.log('[Service Worker] Notification click Received.');
+
+  event.notification.close();
+
+  event.waitUntil(
+    clients.openWindow('https://forum.extra.laposte.fr')
+  );
+});
 
 self.addEventListener('activate', (event) => {
   // Delete all caches that aren't named in CURRENT_CACHES.
